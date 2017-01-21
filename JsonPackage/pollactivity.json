@@ -1,16 +1,15 @@
-{
-	"pollid" : "1",
-    "activityid": "4",
-    "votes": ["1", "5"],
-    "comments" : [
-        {
-        "username": "Denise",
-        "comment" : "only 4-5",
-        "timestamp" : "Jan 8 2017 12:04PM"
-        }
-    ],
-    "activitydef": {
-    "whatever": "JSON is returned by yelp api"
-    }
+ {
+    "_id" : "9fK3jfjjqq3&wq3",
+    "pollid" : "1",
+    "groupdef" : {
+            "groupname" : "The 3 Musketeers",
+            "groupmembers" : [
+    {"username": "Denise", "userid": "1"},
+    {"username": "Anas", "userid": "2"}
+    ]
+    },
+    "postalcode" : "M5T2E3",
+    "activities" : ["4", "6", "21"],
+    "times" : ["Morning", "Night"]
 
 }
