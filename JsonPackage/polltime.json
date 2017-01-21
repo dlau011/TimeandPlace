@@ -1,12 +1,16 @@
-{
-    "pollid": "1",
-    "time" : "Afternoon",
+ {
+	"pollid" : "1",
+    "_id": "4",
+    "votes": ["1", "5"],
     "comments" : [
         {
         "username": "Denise",
         "comment" : "only 4-5",
         "timestamp" : "Jan 8 2017 12:04PM"
         }
-        ],
-    "votes" : ["5", "12"]
+    ],
+    "activitydef": {
+    "whatever": "JSON is returned by yelp api"
+    }
+
 }
