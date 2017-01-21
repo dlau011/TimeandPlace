@@ -4,12 +4,16 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var MongoClient = require('mongodb').MongoClient;
 var index = require('./routes/index');
 var users = require('./routes/users');
-
+var url = 'mongodb://localhost:27017/TimeandPlace';
 var app = express();
 
+MongoClient.connect(url, function(err, db) {
+    console.log("connected to server");
+    db.close();
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -42,5 +46,4 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
 module.exports = app;
