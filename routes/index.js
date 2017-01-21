@@ -12,15 +12,7 @@ MongoClient.connect('mongodb://localhost:27017/TimeandPlace', function (err, con
         db = conn;
     }
 });
-function getNextSequenceValue(sequenceName) {
-    var sequenceDocument = db.collection('counters').updateOne({
-        query:{_id: sequenceName },
-        update: {$inc:{sequence_value:1}},
-        new:true
-    });
 
-    return sequenceDocument.sequence_value;
-}
 /* GET home page. */
 router.get('/', function (req, res, next) {
     console.log("router.get /");
@@ -30,23 +22,28 @@ router.get('/', function (req, res, next) {
 // called when user clicks Create Poll
 router.post('/createpoll', function (req, res) {
     var polldef = {
-        pollid: getNextSequenceValue('pollid'),
+        pollid: null,
         groupdef: {
-            groupname : req.body.groupname,
-            groupmembers : [
-                {username : req.body.username,  userid: getNextSequenceValue('userid')}
+            groupname: req.body.groupname,
+            groupmembers: [
+                {username: req.body.username, userid: 0}
             ]
         },
         postalcode: req.body.postalcode,
         activities: [],
         times: []
     }
-    db.collection('polldef').insert(polldef, function(err, res) {
+    db.collection('polldef').insert(polldef, function (err, res) {
         if (err) {
             console.log("error inserting polldef");
         } else {
             console.log("Inserted a document into the polldef collection.");
         }
     });
+    var test = db.collection('polldef').findOne({postalcode: req.body.postalcode}, function (err, response) {
+        console.log(response.groupdef);
+        res.render('times', null);
+    });
+
 });
 module.exports = router;
