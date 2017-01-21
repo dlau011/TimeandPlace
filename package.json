@@ -1,23 +1,17 @@
 {
-  "name": "testapp",
-  "version": "1.0.0",
-  "description": "test application",
-  "main": "index.js",
+  "name": "timeandplace",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dlau011/testapp.git"
-  },
-  "author": "dl",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dlau011/testapp/issues"
-  },
-  "homepage": "https://github.com/dlau011/testapp#readme",
   "dependencies": {
-    "express": "^4.14.0",
-    "mongodb": "^2.2.21"
+    "body-parser": "~1.15.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "ejs": "~2.5.2",
+    "express": "~4.14.0",
+    "morgan": "~1.7.0",
+    "serve-favicon": "~2.3.0"
   }
 }
