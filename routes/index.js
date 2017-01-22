@@ -45,31 +45,24 @@ router.post('/createpoll', function (req, res) {
     res.render('times', null);
 });
 
-router.post('/proposeactivities', function (req, res, next) {
-    console.log('get /proposeactivities');
-    console.log(req.body);
-    var activities = [];
-    for (var activity in req.body) {
-        activities.push(activity.split('_')[1]);
-        var activity = {
-            "pollid" : myCache.get('pollid'),
-            "votes": [],
-            "comments" : [],
-            "activitydef" : {
-                "name" :
-            }
-        }
-        db.connection('pollactivity').insert(
 
-        )
-    }
-    db.connection('polldef').updateOne(
+router.post('/proposeactivities', function (req, res, next) {
+    console.log('post /proposeactivities');
+    console.log(req.body);
+    //db.connection('polldef').findOne({"_id" : myCache.get('pollid')}, function (err, poll){
+
+    db.collection('polldef').updateOne(
         {"_id" : myCache.get('pollid')},
-        {$set: {"activities" : activities}}
+        {$set: {"activities" : "placeholder"}}
     );
-    res.render('activities', null);
+    //res.render('activities', null);
 });
 
+router.post('/proposeactivities/:activityid', function (req, res, next) {
+    console.log('post /proposeactivities/:activityid');
+    console.log(req.body);
+    console.log(req.params);
+});
 router.post('/proposetimes', function (req, res, next) {
     console.log('get /proposetimes');
     console.log(req.body);
