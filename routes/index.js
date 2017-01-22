@@ -96,3 +96,168 @@ function checkPostal(postcode) {
 }
 
 module.exports = router;
+
+function get_poll_collection(pollid, table, callback) {
+    db.collection(table).findOne({pollid:pollid}, function (err, result) {
+        if (err) {
+            console.log(err.message);
+            throw new Error(err);
+        }
+        console.log(result);
+        callback(null, result);
+    });
+}
+
+function add_poll_user(pollid, username) {
+    db.collection("polldef").findOne({pollid:pollid}, function (err, result) {
+        if (err) {
+            console.log(err.message);
+            throw new Error(err);
+        }
+        var user_list = new Array();
+        user_list = result.groupdef.groupmembers;
+        for (user in user_list) {
+            if (user_list[user] == username) {
+                callback(null, False);
+            }
+        }
+
+        user_list.push({"username":username, "userid": (parseInt(user_list[user_list.length - 1].userid) + 1).toString()});
+        result.groupdef["groupmembers"] = user_list;
+
+        db.collection("polldef").updateOne({pollid:pollid}, {$set:result}, function (err, result) {
+            if (err) {
+                console.log(err.message);
+                throw new Error(err);
+            }
+        });
+        callback(null, True);
+    });
+}
+
+function add_poll_time(poll_time) {
+    db.collection("polltime").insertOne(poll_time, function (err, result) {
+        if (err) {
+            console.log(err.message);
+            throw new Error(err);
+        }
+        update_poll_times(poll_time.pollid, poll_time.time);
+    });
+}
+
+function update_poll_times(pollid, time) {
+    console.log(pollid);
+    db.collection("polldef").findOne({pollid:pollid}, function (err, result) {
+        if (err) {
+            console.log(err.message);
+            throw new Error(err);
+        }
+        console.log(result);
+        var time_list = new Array();
+        time_list = result.times;
+        time_list.push(time);
+        result.time = time_list;
+
+        db.collection("polldef").updateOne({pollid:pollid}, {$set:result}, function (err, result) {
+            if (err) {
+                console.log(err.message);
+                throw new Error(err);
+            }
+        });
+        //callback(null, True);
+    });
+}
+
+function add_time_comment(pollid, time,username, comment) {
+    db.collection("polltime").findOne({pollid:pollid, time:time}, function (err, result) {
+        if (err) {
+            console.log(err.message);
+            throw new Error(err);
+        }
+        var time_list = new Array();
+        time_list = result.comments;
+        time_list.push({"username":username, "Comment": comment, "timestamp" : "now"});
+        result.comments = time_list;
+
+        db.collection("polltime").updateOne({pollid:pollid, time:time}, {$set:result}, function (err, result) {
+            if (err) {
+                console.log(err.message);
+                throw new Error(err);
+            }
+        });
+        //callback(null, True);
+    });
+}
+
+function add_activity_comment(id,username, comment) {
+    db.collection("pollactivity").findOne({activityid:id}, function (err, result) {
+        if (err) {
+            console.log(err.message);
+            throw new Error(err);
+        }
+        console.log(result);
+        var activity_list = new Array();
+        activity_list = result.comments;
+        activity_list.push({"username":username, "Comment": comment, "timestamp" : "now"});
+        result.comments = activity_list;
+
+        db.collection("pollactivity").updateOne({activityid:id}, {$set:result}, function (err, result) {
+            if (err) {
+                console.log(err.message);
+                throw new Error(err);
+            }
+        });
+        //callback(null, True);
+    });
+}
+
+function set_time_vote(pollid, time, username, add_flag) {
+    db.collection("polltime").findOne({pollid:pollid, time:time}, function (err, result) {
+        if (err) {
+            console.log(err.message);
+            throw new Error(err);
+        }
+        var time_list = new Array();
+        time_list = result.votes;
+        if (add_flag == 1) {
+            time_list.push(username);
+        } else {
+            time_list.pop(username);
+        }
+        result.votes = time_list;
+
+        db.collection("polltime").updateOne({pollid:pollid, time:time}, {$set:result}, function (err, result) {
+            if (err) {
+                console.log(err.message);
+                throw new Error(err);
+            }
+        });
+        //callback(null, True);
+    });
+}
+
+function set_activity_vote (id,username, add_flag) {
+    db.collection("pollactivity").findOne({activityid:id}, function (err, result) {
+        if (err) {
+            console.log(err.message);
+            throw new Error(err);
+        }
+        console.log(result);
+        var activity_list = new Array();
+        activity_list = result.votes;
+        if (add_flag == 1) {
+            activity_list.push(username);
+        } else {
+            activity_list.pop(username);
+        }
+        result.votes = activity_list;
+
+        db.collection("pollactivity").updateOne({activityid:id}, {$set:result}, function (err, result) {
+            if (err) {
+                console.log(err.message);
+                throw new Error(err);
+            }
+        });
+        //callback(null, True);
+    });
+}
