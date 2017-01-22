@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+</head>
+<body>
+<h1>Create Poll</h1>
+<p>Welcome to TimeAndPlace</p>
+<form method="post" action="/createpoll">
+    <h4>Username</h4>
+    <input name="username">
+    <h4>Group Name</h4>
+    <input name="groupname">
+    <h4>Postal Code</h4>
+    <input name="postalcode">
+    <input type="submit" value="Create Poll">
+</form>
+</body>
 </html>

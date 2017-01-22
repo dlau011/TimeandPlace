@@ -4,10 +4,24 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var NodeCache = require('node-cache');
+const myCache = new NodeCache( { stdTTL: 100, checkperiod: 120 } );
 var index = require('./routes/index');
 var users = require('./routes/users');
 var app = express();
 
+
+// DB Connection
+var MongoClient = require('mongodb').MongoClient;
+var db = null;
+MongoClient.connect('mongodb://localhost:27017/TimeandPlace', function (err, conn) {
+    if (err) {
+        console.log(err.message);
+        throw new Error(err);
+    } else {
+        db = conn;
+    }
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -22,6 +36,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+
+// all POST calls go through here
+app.post('/', function (req, res) {
+    console.log('app.post //n' + req.body);
+});
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -40,6 +60,8 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+
 module.exports = app;
 
 
