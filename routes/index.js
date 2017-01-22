@@ -1,6 +1,9 @@
+
 var express = require('express');
 var router = express.Router();
 var NodeCache = require('node-cache');
+//var yelp = require('node-yelp');
+
 const myCache = new NodeCache({stdTTL: 100, checkperiod: 120});
 // DB Connection
 var MongoClient = require('mongodb').MongoClient;
@@ -14,6 +17,15 @@ MongoClient.connect('mongodb://localhost:27017/TimeandPlace', function (err, con
     }
 });
 
+// returns next sequence number in db
+function getNextSequence(name) {
+    var result = db.collection('counters').updateOne(
+        {"_id" : name},
+        { $inc: { sequence_value: 1 }}
+    );
+
+    return result.sequence_value;
+}
 /* GET home page. */
 router.get('/', function (req, res, next) {
     console.log("index .get /");
@@ -28,13 +40,14 @@ router.post('/createpoll', function (req, res) {
         groupdef: {
             groupname: req.body.groupname,
             groupmembers: [
-                {username: req.body.username, userid: 0}
+                {username: req.body.username, userid: getNextSequence('userid')}
             ]
         },
         postalcode: req.body.postalcode,
         activities: [],
         times: []
     }
+    console.log("userid: " + polldef.groupdef.groupmembers)
     db.collection('polldef').insert(polldef, function (err) {
         if (err) {
             console.log("error inserting polldef");
@@ -44,24 +57,29 @@ router.post('/createpoll', function (req, res) {
     });
     res.render('times', null);
 });
+// do get when user wants new page?
+// do post when user clicks on any data and commit it to db?
 
-
+// called when user goes to propose activities
 router.post('/proposeactivities', function (req, res, next) {
     console.log('post /proposeactivities');
     console.log(req.body);
-    //db.connection('polldef').findOne({"_id" : myCache.get('pollid')}, function (err, poll){
+    //db.collection('polldef').findOne({"_id" : myCache.get('pollid')}, function (err, poll){
 
-    db.collection('polldef').updateOne(
-        {"_id" : myCache.get('pollid')},
-        {$set: {"activities" : "placeholder"}}
-    );
+
     //res.render('activities', null);
 });
 
+// called when user clicks on an activity to propose. Adds it to polldef.activities
 router.post('/proposeactivities/:activityid', function (req, res, next) {
     console.log('post /proposeactivities/:activityid');
     console.log(req.body);
-    console.log(req.params);
+    var activityid = req.params.activityid;
+    // add this activity to polldef.activities
+    db.collection('polldef').update(
+        {"pollid": myCache.get("pollid")},
+        {$push: {"activities" : activityid}});
+
 });
 router.post('/proposetimes', function (req, res, next) {
     console.log('get /proposetimes');

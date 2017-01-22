@@ -1,3 +1,4 @@
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -9,8 +10,6 @@ const myCache = new NodeCache( { stdTTL: 100, checkperiod: 120 } );
 var index = require('./routes/index');
 var users = require('./routes/users');
 var app = express();
-
-
 // DB Connection
 var MongoClient = require('mongodb').MongoClient;
 var db = null;
@@ -60,6 +59,7 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
 
 
 module.exports = app;
