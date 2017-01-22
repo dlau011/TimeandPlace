@@ -56,12 +56,10 @@ router.post('/proposeactivities', function (req, res, next) {
             "votes": [],
             "comments" : [],
             "activitydef" : {
-                "name" :
+                "name" : "placeholder"
             }
         }
-        db.connection('pollactivity').insert(
-
-        )
+        db.connection('pollactivity').insert(activity);
     }
     db.connection('polldef').updateOne(
         {"_id" : myCache.get('pollid')},
