@@ -7,14 +7,26 @@
 <body>
 <h1>Create Poll</h1>
 <p>Welcome to TimeAndPlace</p>
-<form method="post" action="/createpoll">
+<form method="post" onsubmit="return validateForm()" action="/createpoll" id="createpoll">
     <h4>Username</h4>
-    <input name="username">
+    <input name="username" required>
     <h4>Group Name</h4>
-    <input name="groupname">
+    <input name="groupname"  required>
     <h4>Postal Code</h4>
-    <input name="postalcode">
+
+    <input name="postalcode" id="postalcode" required>
     <input type="submit" value="Create Poll">
 </form>
 </body>
+<script>
+    function validateForm() {
+        var regEx = /[a-zA-Z][0-9][a-zA-Z](-| |)[0-9][a-zA-Z][0-9]/;
+        if(regEx.test(document.getElementById("postalcode").value))
+            return true;
+        else
+            alert('Invalid Postal Code');
+            return false;
+    }
+</script>
+
 </html>
