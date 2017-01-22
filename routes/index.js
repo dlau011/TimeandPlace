@@ -15,25 +15,24 @@ MongoClient.connect('mongodb://localhost:27017/timeandplacedb', function (err, c
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    var results = getpoll("1", function (err, result) {
-        if (err) {
-            console.log(err.message);
-            throw new Error(err);
-        }
-        console.log(result);
-        res.render("index", {title: "Your UsrID is " + result.pollid});
-    });
-});
-
-function getpoll(pollid, callback) {
-    db.collection("polldef").findOne({pollid:pollid}, function (err, result) {
+    var results = getpollcollection("1", "polldef", function (err, result) {
         if (err) {
             console.log(err.message);
             throw new Error(err);
         }
         //console.log(result);
+        res.render("index", {title: "Your UsrID is " + result.pollid});
+    });
+});
+
+function getpollcollection(pollid, table, callback) {
+    db.collection(table).findOne({pollid:pollid}, function (err, result) {
+        if (err) {
+            console.log(err.message);
+            throw new Error(err);
+        }
+        console.log(result);
         callback(null, result);
-        //return result;
     });
 }
 
