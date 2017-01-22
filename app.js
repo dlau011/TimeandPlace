@@ -3,13 +3,11 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser
+var bodyParser = require('body-parser');
 var NodeCache = require('node-cache');
 const myCache = new NodeCache( { stdTTL: 100, checkperiod: 120 } );
 var index = require('./routes/index');
 var users = require('./routes/users');
-var linksharing = require('./routes/linksharing');
-
 var app = express();
 
 
@@ -38,7 +36,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/linksharing',linksharing);
 
 // all POST calls go through here
 app.post('/', function (req, res) {
