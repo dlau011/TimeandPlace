@@ -3,42 +3,46 @@
 <head>
     <title>Propose Times</title>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script>
+        function selectTD(id) {
+            var elemInput = document.getElementById(id);
+            var elemTD = document.getElementById(id+'TD');
+            var flag = elemInput.value
+            if (flag == "0") {
+                elemInput.value = "1";
+                elemTD.style.backgroundColor = "red";
+            } else {
+                elemInput.value = "0";
+                elemTD.style.backgroundColor = "white";
+            }
+        }
+    </script>
 </head>
 <body>
-<script>
-    function select(id) {
-        var elemInput = document.getElementById(id);
-        var elemTD = document.getElementById(id+'TD');
-        var flag = elemInput.value
-        if (flag == "0") {
-            elemInput.value = "1";
-            elemTD.css("background-color", "red");
-        } else {
-            elemInput.value = "0";
-            elemTD.css("background-color", "white");
-        }
-    }
-</script>
 
 <form method="post" id="timeForm" action="/proposetimes">
     <table id="timesTable">
-    <tr><td id="morningTD" onclick="select('morning');">
-        "Morning"
+    <tr><td id="morningTD" onclick="selectTD('morning');">
+        Morning
     </td></tr>
-        <tr><td id="afternoonTD" onclick="select('afternoon');">
-        "Afternoon"
+        <tr><td id="afternoonTD" onclick="selectTD('afternoon');">
+        Afternoon
     </td></tr>
-        <tr><td id="eveningTD" onclick="select('evening');">
-        "Evening"
+        <tr><td id="eveningTD" onclick="selectTD('evening');">
+        Evening
     </td></tr>
-        <tr><td id="nightTD" onclick="select('night');">
+        <tr><td id="nightTD" onclick="selectTD('night');">
         Night
     </td></tr>
     </table>
-    <input type="hidden" id="morning" value="0">
-    <input type="hidden" id="afternoon" value="0">
-    <input type="hidden" id="evening" value="0">
-    <input type="hidden" id="night" value="0">
+
+    <input type="submit" value="Continue">
+
+    <input type="hidden" id="morning" name="morning" value="0">
+    <input type="hidden" id="afternoon" name="afternoon" value="0">
+    <input type="hidden" id="evening" name="evening" value="0">
+    <input type="hidden" id="night" name="night" value="0">
 </form>
 
 </body>
