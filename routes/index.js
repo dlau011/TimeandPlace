@@ -40,10 +40,15 @@ router.post('/createpoll', function (req, res) {
             console.log("Inserted a document into the polldef collection.");
         }
     });
-    var test = db.collection('polldef').findOne({postalcode: req.body.postalcode}, function (err, response) {
-        console.log(response.groupdef);
-        res.render('times', null);
-    });
-
+    
 });
+
+function checkPostal(postcode) {
+    var regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
+    if (regex.test(postcode.value))
+        return true;
+    else
+       return false;
+}
+
 module.exports = router;
