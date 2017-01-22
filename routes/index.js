@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var NodeCache = require('node-cache');
+const myCache = new NodeCache({stdTTL: 100, checkperiod: 120});
 // DB Connection
 var MongoClient = require('mongodb').MongoClient;
 var db = null;
@@ -8,19 +10,19 @@ MongoClient.connect('mongodb://localhost:27017/TimeandPlace', function (err, con
         console.log(err.message);
         throw new Error(err);
     } else {
-        console.log("connected to server index.js");
         db = conn;
     }
 });
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    console.log("router.get /");
+    console.log("index .get /");
     res.render('index', {title: 'router.get title'});
 });
 
 // called when user clicks Create Poll
 router.post('/createpoll', function (req, res) {
+    console.log('get /createpoll');
     var polldef = {
         pollid: null,
         groupdef: {
@@ -33,17 +35,58 @@ router.post('/createpoll', function (req, res) {
         activities: [],
         times: []
     }
-    db.collection('polldef').insert(polldef, function (err, res) {
+    db.collection('polldef').insert(polldef, function (err) {
         if (err) {
             console.log("error inserting polldef");
         } else {
-            console.log("Inserted a document into the polldef collection.");
+            myCache.set('pollid', polldef._id);
         }
     });
-    var test = db.collection('polldef').findOne({postalcode: req.body.postalcode}, function (err, response) {
-        console.log(response.groupdef);
-        res.render('times', null);
-    });
+    res.render('times', null);
+});
+
+router.post('/proposeactivities', function (req, res, next) {
+    console.log('get /proposeactivities');
+    console.log(req.body);
+    var activities = [];
+    for (var activity in req.body) {
+        activities.push(activity.split('_')[1]);
+        var activity = {
+            "pollid" : myCache.get('pollid'),
+            "votes": [],
+            "comments" : [],
+            "activitydef" : {
+                "name" :
+            }
+        }
+        db.connection('pollactivity').insert(
+
+        )
+    }
+    db.connection('polldef').updateOne(
+        {"_id" : myCache.get('pollid')},
+        {$set: {"activities" : activities}}
+    );
+    res.render('activities', null);
+});
+
+router.post('/proposetimes', function (req, res, next) {
+    console.log('get /proposetimes');
+    console.log(req.body);
+    var times = [];
+    if (req.body.morning == '1') times.push("Morning");
+    if (req.body.afternoon == '1') times.push("Afternoon");
+    if (req.body.evening == '1') times.push('Evening');
+    if (req.body.night == '1') times.push("Night");
+    try {
+        db.collection('polldef').updateOne(
+            {"_id": myCache.get("pollid")},
+            {$set: {"times": times}}
+        );
+    } catch (e) {
+        res.send(e);
+    }
+    res.render('activities', null);
 
 });
 module.exports = router;

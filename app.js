@@ -4,9 +4,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var NodeCache = require('node-cache');
+const myCache = new NodeCache( { stdTTL: 100, checkperiod: 120 } );
 var index = require('./routes/index');
 var users = require('./routes/users');
+var proposals = require('./routes/proposals');
 var app = express();
+
+
 // DB Connection
 var MongoClient = require('mongodb').MongoClient;
 var db = null;
@@ -15,7 +20,6 @@ MongoClient.connect('mongodb://localhost:27017/TimeandPlace', function (err, con
         console.log(err.message);
         throw new Error(err);
     } else {
-        console.log("connected to server app.js");
         db = conn;
     }
 });
@@ -33,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+//app.use('/proposals', proposals);
 
 // all POST calls go through here
 app.post('/', function (req, res) {
@@ -57,5 +62,6 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
 
 module.exports = app;
