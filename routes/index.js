@@ -88,5 +88,15 @@ router.post('/proposetimes', function (req, res, next) {
     }
     res.render('activities', null);
 
+
 });
+
+function checkPostal(postcode) {
+    var regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
+    if (regex.test(postcode.value))
+        return true;
+    else
+       return false;
+}
+
 module.exports = router;
