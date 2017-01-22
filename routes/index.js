@@ -52,6 +52,7 @@ router.post('/proposeactivities', function (req, res, next) {
     //db.connection('polldef').findOne({"_id" : myCache.get('pollid')}, function (err, poll){
 
     db.collection('polldef').updateOne(
+
         {"_id" : myCache.get('pollid')},
         {$set: {"activities" : "placeholder"}}
     );
