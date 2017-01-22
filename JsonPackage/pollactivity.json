@@ -1,0 +1,15 @@
+ {
+    "_id" : "9fK3jfjjqq3&wq3",
+    "pollid" : "1",
+    "groupdef" : {
+            "groupname" : "The 3 Musketeers",
+            "groupmembers" : [
+    {"username": "Denise", "userid": "1"},
+    {"username": "Anas", "userid": "2"}
+    ]
+    },
+    "postalcode" : "M5T2E3",
+    "activities" : ["4", "6", "21"],
+    "times" : ["Morning", "Night"]
+
+}
