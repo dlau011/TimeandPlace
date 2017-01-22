@@ -4,28 +4,59 @@
     <title>Activities</title>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-
+    <script>
+        function highlight(id) {
+            var form = document.getElementById('activityForm_' + id);
+            var selected = document.getElementById('selected_' + id);
+            // if not selected, highligh yellow
+            if (selected.value == "0") {
+                form.style.backgroundColor = "yellow";
+            }
+        }
+        function unhighlight(id) {
+            var form = document.getElementById('activityForm_' + id);
+            var selected = document.getElementById('selected_' + id);
+            if (selected.value == "0") {
+                form.style.backgroundColor = "white";
+            }  else {
+                form.style.backgroundColor = "red";
+            }
+        }
+        function select(id) {
+            var selected = document.getElementById('selected_' + id);
+            var form = document.getElementById('activityForm_' + id);
+            if (selected.value == "0") {
+                selected.value = "1";
+                form.style.backgroundColor = "red";
+                form.submit();
+            } else {
+                selected.value = "0";
+                form.style.backgroundColor = "white";
+                form.submit();
+            }
+        }
+    </script>
 </head>
 <body>
 
-<form method="post" id="activitiesForm" action="/proposeactivities">
+
+<form method="post" onclick="select('1')" onmouseover="highlight('1')" onmouseout="unhighlight('1')" name="activityForm_1" id="activityForm_1" action="/proposeactivities/2">
     <table id="activitiesTable">
         <tr>
-            <td id="activity_1_TD">Activity 1</td>
-            <td><input type="checkbox" name="activity_1"></td>
+            <td>Activity 1</td>
         </tr>
+    </table>
+    <input type="hidden" id="selected_1" name="selected_1" value="0">
+</form>
+
+<form method="post" onclick="select('2')" onmouseover="highlight('2')" onmouseout="unhighlight('2')" name="activityForm_2" id="activityForm_2" action="/proposeactivities/2">
+    <table id="activitiesTable">
         <tr>
-            <td id="activity_2_TD">Activity 2</td>
-            <td><input type="checkbox" name="activity_2"></td>
-        </tr>
-        <tr>
-            <td id="activity_3_TD">Activity 3</td>
-            <td><input type="checkbox" name="activity_3"></td>
+            <td>Activity 2</td>
         </tr>
     </table>
 
-    <input type="submit" value="Continue">
-
+    <input type="hidden" id="selected_2" name="selected_2" value="0">
 </form>
 
 </body>
